@@ -1,0 +1,16 @@
+{
+	"author": "Arian Stolwijk",
+	"name": "cubic-bezier",
+	"description": "A small cubic bézier timing function",
+	"version": "0.0.1",
+	"main": "index",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/arian/cubic-bezier.git"
+	},
+	"scripts": {
+		"test": "node test/test.js"
+	},
+	"dependencies": {},
+	"devDependencies": {}
+}
