@@ -5,10 +5,10 @@ module.exports = function(x1, y1, x2, y2, n, epsilon){
 	if (!epsilon) epsilon = 10 / n;
 
 	for (var i = 1; i < (n - 1); i++){
-		var u = 1 / n * i,
-			a = Math.pow(1 - u, 2) * 3 * u,
-			b = Math.pow(u, 2) * 3 * (1 - u),
-			c = Math.pow(u, 3);
+		var u = 1 / n * i, v = 1 - u,
+			a = v * v * 3 * u,
+			b = u * u * 3 * v,
+			c = u * u * u;
 		var _x = x1 * a + x2 * b + c;
 		var _y = y1 * a + y2 * b + c;
 		if ((_x - x) > epsilon){
