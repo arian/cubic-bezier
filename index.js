@@ -1,10 +1,8 @@
 
-module.exports = function(x1, y1, x2, y2, n){
+module.exports = function(x1, y1, x2, y2, n, epsilon){
 
-	var xs = [0];
-	var ys = [0];
-
-	var x = 0;
+	var xs = [0], ys = [0], x = 0;
+	if (!epsilon) epsilon = 10 / n;
 
 	for (var i = 1; i < (n - 1); i++){
 		var u = 1 / n * i,
@@ -13,7 +11,7 @@ module.exports = function(x1, y1, x2, y2, n){
 			c = Math.pow(u, 3);
 		var _x = x1 * a + x2 * b + c;
 		var _y = y1 * a + y2 * b + c;
-		if ((_x - x) > (10 / n)){
+		if ((_x - x) > epsilon){
 			x = _x;
 			xs.push(_x);
 			ys.push(_y);
@@ -34,7 +32,7 @@ module.exports = function(x1, y1, x2, y2, n){
 		}
 
 		return ys[middle];
-		
-	};	
+
+	};
 
 };
