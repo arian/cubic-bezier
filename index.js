@@ -1,37 +1,48 @@
 
-module.exports = function(x1, y1, x2, y2, n, epsilon){
+module.exports = function(x1, y1, x2, y2, epsilon){
 
-	var xs = [0], ys = [0], x = 0;
-	if (!epsilon) epsilon = 10 / n;
+	var curveX = function(t){
+		var v = 1 - t;
+		return 3 * v * v * t * x1 + 3 * v * t * t * x2 + t * t * t;
+	};
 
-	for (var i = 1; i < (n - 1); i++){
-		var u = 1 / n * i, v = 1 - u,
-			a = v * v * 3 * u,
-			b = u * u * 3 * v,
-			c = u * u * u;
-		var _x = x1 * a + x2 * b + c;
-		var _y = y1 * a + y2 * b + c;
-		if ((_x - x) > epsilon){
-			x = _x;
-			xs.push(_x);
-			ys.push(_y);
-		}
-	}
+	var curveY = function(t){
+		var v = 1 - t;
+		return 3 * v * v * t * y1 + 3 * v * t * t * y2 + t * t * t;
+	};
 
-	xs.push(1);
-	ys.push(1);
+	var derivativeCurveX = function(t){
+		var v = 1 - t;
+		return 3 * (2 * (t - 1) * t + v * v) * x1 + 3 * (- t * t * t + 2 * v * t) * x2;
+	};
 
 	return function(t){
 
-		var left = 0, right = xs.length - 1;
-		while (left <= right){
-			var middle = Math.floor((left + right) / 2);
-			if (xs[middle] == t) break;
-			else if (xs[middle] > t) right = middle - 1;
-			else left = middle + 1;
+		var x = t, t0, t1, t2, x2, d2, i;
+
+		// First try a few iterations of Newton's method -- normally very fast.
+		for (t2 = x, i = 0; i < 8; i++){
+			x2 = curveX(t2) - x;
+			if (Math.abs(x2) < epsilon) return curveY(t2);
+			d2 = derivativeCurveX(t2);
+			if (Math.abs(d2) < 1e-6) break;
+			t2 = t2 - x2 / d2;
 		}
 
-		return ys[middle];
+		if (t2 < t0) return curveY(t0);
+		if (t2 > t1) return curveY(t1);
+
+		// Fallback to the bisection method for reliability.
+		while (t0 < t1){
+			x2 = curveX(t2);
+			if (Math.abs(x2 - x) < epsilon) return curveY(t2);
+			if (x > x2) t0 = t2;
+			else t1 = t2;
+			t2 = (t1 - t0) * .5 + t0;
+		}
+
+		// Failure
+		return curveY(t2);
 
 	};
 

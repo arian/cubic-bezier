@@ -14,13 +14,15 @@ Usage
 -----
 
 ``` js
-var timingFunction = bezier(p1x, p1y, p2x, p2y, n);
+var timingFunction = bezier(p1x, p1y, p2x, p2y, epsilon);
 
-// n is the precision, the higher the more precise, but slower.
-// a good approximation is for animations is: duration in ms * 2
+// epsilon determines the precision of the solved values
+// a good approximation is:
+var duration = 200; // duration of animation in milliseconds.
+var epsilon = (1000 / 60 / duration) / 4;
 
-var easeIn = bezier(0.42, 0, 1.0, 1.0, 1000);
-var linear = bezier(0, 0, 1, 1, 1000);
+var easeIn = bezier(0.42, 0, 1.0, 1.0, epsilon);
+var linear = bezier(0, 0, 1, 1, epsilon);
 
 for (var t = 0; t <= 1; t += 0.001){
 	console.log(easeIn(t));
