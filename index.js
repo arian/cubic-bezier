@@ -29,6 +29,8 @@ module.exports = function(x1, y1, x2, y2, epsilon){
 			t2 = t2 - x2 / d2;
 		}
 
+		t0 = 0, t1 = 1, t2 = x;
+
 		if (t2 < t0) return curveY(t0);
 		if (t2 > t1) return curveY(t1);
 
